@@ -1,0 +1,11 @@
+%smoke
+たばこ	t
+禁煙	k
+喫煙	k
+% DESU
+です	d
+% NS_B
+<s>	silB
+% NS_E
+</s>	silE
+	
