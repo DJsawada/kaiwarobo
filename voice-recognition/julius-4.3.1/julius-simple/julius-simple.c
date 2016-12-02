@@ -331,8 +331,8 @@ int main(int argc, char *argv[]){
 		/**********************/
 		/* enter main loop to recognize the input stream */
 		/* finish after whole input has been processed and input reaches end */
-		ret = j_recognize_stream(recog);
-		if (ret == -1) return -1;	/* error */
+		//ret = j_recognize_stream(recog);
+		//if (ret == -1) return -1;	/* error */
 		/*******/
 		/* End */
 		/*******/

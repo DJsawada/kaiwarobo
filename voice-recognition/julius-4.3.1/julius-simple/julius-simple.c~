@@ -32,7 +32,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include<julius/juliuslib.h>
-#include <signal.h>
 /*Callback to be called when start waiting speech input.*/
 static void status_recready(Recog *recog, void *dummy){
 	if(recog->jconf->input.speech_input == SP_MIC || recog->jconf->input.speech_input == SP_NETAUDIO){
@@ -227,21 +226,6 @@ int startup(void *data){
 	callback_add(recog, CALLBACK_EVENT_RECOGNITION_END, func_end, NULL);
 	return 0;
 }
-void sigcatch(int);
-int sigcansel(void *data) {
-	if (SIG_ERR == signal(SIGHUP, sigcatch)) {
-		printf("failed to set signal handler.n");
-		exit(1);
-	}
-	while (1) {
-		sleep(1);
-	}
-	return 0;
-}
-void sigcatch(int sig) {
-	printf("catch signal %dn", sig);
-	exit(1);
-}
 /*Main function*/
 int main(int argc, char *argv[]){
 	/*configuration parameter holder*/
@@ -347,7 +331,6 @@ int main(int argc, char *argv[]){
 		/**********************/
 		/* enter main loop to recognize the input stream */
 		/* finish after whole input has been processed and input reaches end */
-		sigcansel(void *data);
 		ret = j_recognize_stream(recog);
 		if (ret == -1) return -1;	/* error */
 		/*******/
