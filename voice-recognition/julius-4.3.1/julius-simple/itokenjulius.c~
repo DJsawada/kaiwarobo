@@ -1,0 +1,4 @@
+#include<stdio.h>
+main(){
+	system("./julius-simple -C ~/work/sawada/voice-recognition/dictation-kit-v4.3.1-linux/tabaco.jconf -nostrip > ~/work/sawada/voice-recognition/testfile/satukitei.txt");
+}

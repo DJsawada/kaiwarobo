@@ -1,0 +1,10 @@
+#include<stdio.h>
+main(){
+	int i,j;
+	for(j=0;j<=5000000;j++){
+		for(i=0;i<=5000000;i++){
+		}
+	break;
+	}
+	printf("終了");
+}

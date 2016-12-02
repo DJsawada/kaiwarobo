@@ -1,0 +1,10 @@
+jcontrol itolab-pc01
+202.223.149.161
+adintool -in mic -out vecnet -paramtype MFCC_E_D_N_Z -veclen 25 -C tabaco.jconf
+
+ADDGRAM tabaco\n
+ ［tabaco.dfa］\n
+DFAEND\n
+ ［tabaco.dict］\n
+DICEND\n
+

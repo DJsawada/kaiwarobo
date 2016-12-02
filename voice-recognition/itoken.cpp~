@@ -1,0 +1,7 @@
+#include"stdio.h"
+#include"stdlib.h"
+main(){
+	system("julius -C ~/work/sawada/voice-recognition/dictation-kit-v4.3.1-linux/tabaco.jconf \
+		-input mic -charconv EUC-JP UTF-8 -module");
+	system("tail -n +20 test.txt");
+}

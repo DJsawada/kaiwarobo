@@ -1,0 +1,8 @@
+#include"stdio.h"
+#include"stdlib.h"
+main(){
+	system("echo ~/satukitei.txt | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+		-m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+		-ow ~/ira.wav");
+	system("aplay ~/ira.wav");
+}

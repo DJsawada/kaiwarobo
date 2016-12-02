@@ -1,0 +1,123 @@
+#include　　　　<stdio.h>
+#include　　　　<string.h>
+#include　　　　<errno.h>
+#include　　　　<signal.h>
+#include　　　　<fcntl.h>
+#include　　　　<sys/types.h>
+#include　　　　<sys/socket.h>
+#include　　　　<netinet/in.h>
+#include　　　　<netdb.h>
+#include　　　　<sys/stat.h>
+#include　　　　<sys/param.h>
+#include　　　　<sys/time.h>
+int　　 Soc=NULL;
+void CloseSocket();
+void main(argc,argv)
+int　　 argc;
+char　　*argv[];
+
+struct servent　*se;
+struct hostent　*servhost;
+struct sockaddr_in　　　server;
+struct timeval　timeout;
+fd_set　Mask,readOk;
+int　　 width;
+char　　buf[512];
+int　　 ret,error;
+char　　hostname[itolab-pc01];
+char　　port[80];
+　　　　if(argc<2){
+　　　　　　　　gethostname(hostname,itolab-pc01);
+　　　　}
+　　　　else{
+　　　　　　　　strcpy(hostname,argv[1]);
+　　　　}
+　　　　if(argc<3){
+　　　　　　　　strcpy(port,"ftp");
+　　　　}
+　　　　else{
+　　　　　　　　strcpy(port,argv[2]);
+　　　　}
+　　　　se=getservbyname(port,"tcp");
+　　　　if(se==NULL){
+　　　　　　　　perror("getservbyname");
+　　　　　　　　exit(0);
+　　　　}
+　　　　servhost=gethostbyname(hostname);
+　　　　if(servhost==NULL){
+　　　　　　　　u_long　addr;
+　　　　　　　　addr=inet_addr(hostname);
+　　　　　　　　servhost=gethostbyaddr((char *)&addr,sizeof(addr),AF_INET);
+　　　　　　　　if(servhost==NULL){
+　　　　　　　　　　　　perror("gethostbyaddr");
+　　　　　　　　　　　　exit(0);
+　　　　　　　　}
+　　　　if((Soc=socket(AF_INET,SOCK_STREAM,0))<0){
+　　　　　　　　perror("socket");
+　　　　　　　　exit(0);
+　　　　}
+　　　　memset((char *)&server,0,sizeof(server));
+　　　　server.sin_family=AF_INET;
+　　　　server.sin_port=se->s_port;
+　　　　memcpy((char *)&server.sin_addr,servhost->h_addr,servhost->h_length);
+　　　　if(connect(Soc,&server,sizeof(server))== -1){
+　　　　　　　　perror("connect");
+　　　　　　　　exit(0);
+　　　　}
+
+　　　　signal(SIGINT,CloseSocket);
+　　　　signal(SIGTERM,CloseSocket);
+　　　　FD_ZERO(&Mask);
+　　　　FD_SET(Soc,&Mask);
+　　　　FD_SET(0,&Mask);
+　　　　width=Soc+1;
+　　　　error=0;
+　　　　while(1){
+　　　　　　　　readOk=Mask;
+　　　　　　　　timeout.tv_sec=0;
+　　　　　　　　timeout.tv_usec=100000;
+　　　　　　　　switch(select(width,(fd_set *)&readOk,NULL,NULL,&timeout)){
+　　　　　　　　　　　　case　　-1:
+　　　　　　　　　　　　　　　　perror("select");
+　　　　　　　　　　　　　　　　break;
+　　　　　　　　　　　　case　　0:
+　　　　　　　　　　　　　　　　break;
+　　　　　　　　　　　　default:
+　　　　　　　　　　　　　　　　if(FD_ISSET(0,&readOk)){
+　　　　　　　　　　　　　　　　　　　　fgets(buf,sizeof(buf),stdin);
+　　　　　　　　　　　　　　　　　　　　if(strlen(buf)>0){
+　　　　　　　　　　　　　　　　　　　　　　　　ret=send(Soc,buf,strlen(buf),0);
+　　　　　　　　　　　　　　　　　　　　　　　　if(ret== -1){
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　perror("send");
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　error=1;
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　break;
+　　　　　　　　　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　if(FD_ISSET(Soc,&readOk)){
+　　　　　　　　　　　　　　　　　　　　ret=recv(Soc,buf,sizeof(buf),0);
+　　　　　　　　　　　　　　　　　　　　if(ret<=0){
+　　　　　　　　　　　　　　　　　　　　　　　　perror("recv");
+　　　　　　　　　　　　　　　　　　　　　　　　error=1;
+　　　　　　　　　　　　　　　　　　　　　　　　break;
+　　　　　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　　　　　buf[ret]='\0';
+　　　　　　　　　　　　　　　　　　　　fprintf(stderr,"%s",buf);
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　break;
+　　　　　　　　}
+　　　　　　　　if(error){
+　　　　　　　　　　　　break;
+　　　　　　　　}
+　　　　}
+　　　　CloseSocket();
+　　　　exit(0);
+}
+void CloseSocket()
+{
+　　　　if(Soc!=NULL){
+　　　　　　　　close(Soc);
+　　　　　　　　Soc=NULL;
+　　　　}
+　　　　exit(0);
+}

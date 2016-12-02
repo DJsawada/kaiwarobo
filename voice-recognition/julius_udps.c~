@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#define BUFFER_SIZE 256
+main(){
+	/*IPアドレス、ポート番号、ソケット*/
+	double unsgined;
+	char destination[80];
+	short port = 10500;
+	int destSocket;
+	/*sockaddr_in 構造体*/
+	struct sockaddr_in destSockAddr;
+	/*各種パラメータ*/
+	int i;
+	char *toSendText = "This is a test";
+	/*相手先アドレスの入力*/
+	printf("Connect to ? : 202.223.149.161");
+	scanf("%s", destination);
+	/*sockaddr_in 構造体のセット*/
+	memset(&destSockAddr, 0, sizeof(destSockAddr));
+	destSockAddr.sin_addr.s_addr = inet_addr(destination);
+	destSockAddr.sin_port = htons(port);
+	destSockAddr.sin_family = AF_INET;
+	/*ソケット生成*/
+	destSocket = socket(AF_INET, SOCK_DGRAM, 0);
+	/*パケット送出*/
+	for(i=0; i<10; i++){
+	printf("sending...\n");
+	sendto(destSocket, toSendText, strlen(toSendText)+1, 0, &destSockAddr, sizeof(destSockAddr));
+	sleep(1);
+	}
+	/*ソケットの終了*/
+	close(destSocket);
+}
+	/*ポート番号、ソケット*/
+	unsigned short port = 10500;
+	int recvSocket;
+	/*sockaddr_in 構造体*/
+	struct sockaddr_in recvSockAddr;
+	/*各種パラメータ*/
+	int status;
+	int numrcv;
+	char buffer[BUFFER_SIZE];
+	unsigned long on = 1;
+	/*sockaddr_in 構造体のセット*/
+	memset(recvSockAddr, 0 , sizeof(recvSockAddr));
+	recvSockAddr.sin_port = htons(port);
+	recvSockAddr.sin_family = AF_INET;
+	recvSockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	/* ソケット生成 */
+	recvSocket = socket(AF_INET, SOCK_DGRAM, 0);
+	/*バインド*/
+	status=bind(recvSocket, (struct sockaddr_in *) &recvSockAddr, sizeof(recvSockAddr));	
+	/*パケット受信*/
+	while(1){
+		numrcv=recvfrom(recvSocket, buffer, BUFFER_SIZE, 0, NULL, NULL);
+		if(numrcv == -1){
+			status = close(recvSocket); break;
+		}
+	printf("received: %s\n", buffer);
+}

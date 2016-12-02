@@ -1,0 +1,8 @@
+#include<stdio.h>
+main(){
+SOCKET socket(af, type, protocol);
+	SOCKET ret;
+	int af;
+    int type;
+    int protocol;
+}

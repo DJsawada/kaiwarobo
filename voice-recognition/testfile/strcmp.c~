@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+    char buff[256];    /* 入力文字列用 */
+
+    printf("文字列 : ");  /* プロンプト表示 */
+    gets(buff);          /* 文字列入力 */
+
+    if(!strcmp(buff, "abc"))    /* 文字列比較 */
+        printf("GOOD\n");    /* 表示 */
+    else
+        printf("ERROR\n");   /* 表示 */
+    return(0);
+}

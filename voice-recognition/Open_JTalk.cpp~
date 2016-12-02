@@ -1,0 +1,41 @@
+#include "stdio.h"
+#include "stdlib.h"
+int main(void)
+{
+	system("echo いらっしゃいませ。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+		-m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+		-ow ~/ira.wav");
+	system("aplay ~/ira.wav");
+
+	system("echo 禁煙ですか。喫煙ですか。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+                -m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+                -ow ~/smoke.wav");
+	system("aplay ~/smoke.wav");
+
+	system("echo もう一度お願いします。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+                -m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+                -ow ~/onemore.wav");
+	system("aplay ~/onemore.wav");
+
+	system("echo こちらの席へどうぞ。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+                -m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+                -ow ~/come.wav");
+	system("aplay ~/come.wav");
+
+	system("echo ごゆっくりどうぞ。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+                -m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+                -ow ~/yukkuri.wav");
+	system("aplay ~/yukkuri.wav");
+
+	system("echo 何か御用ですか | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic \
+		-m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+		-ow ~/goyou.wav");
+	system("aplay ~/goyou.wav");
+
+	system("mv ~/ira.wav ~/wavfile");
+	system("mv ~/smoke.wav ~/wavfile");
+	system("mv ~/onemore.wav ~/wavfile");
+	system("mv ~/come.wav ~/wavfile");
+	system("mv ~/yukkuri.wav ~/wavfile");
+	system("mv ~/goyou.wav ~/wavfile");
+}

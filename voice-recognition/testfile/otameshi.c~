@@ -1,0 +1,23 @@
+#include <stdio.h>
+main() {
+	FILE * fp;
+	int ret;
+	char getstr[4];
+	int getint;
+	/* Windowsの場合はtest.txt */
+	fp = fopen( "test.txt" , "r" );
+	if( fp == NULL ) {
+		printf( "ファイルオープンエラー\n" );
+		return -100;
+	}
+	/* ファイルから各変数に変換して代入 */
+	while(( ret = fscanf( fp , "%s%d" , getstr , &getint )) != EOF ) {
+		/* 変換して代入された変数を表示 */
+		printf( "getstr=%s\n" , getstr );
+		printf( "getint=%d\n" , getint );
+		printf( "ret=%d\n" , ret );
+	}
+	printf( "\nret=%d\n" , ret );/* -1 */
+	fclose( fp );
+	return 0;
+}

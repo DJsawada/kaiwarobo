@@ -1,0 +1,39 @@
+#include <signal.h>
+#include <stdio.h>
+void sigcatch(int);
+05.
+ 
+06.
+int main() {
+07.
+if (SIG_ERR == signal(SIGHUP, sigcatch)) {
+08.
+printf("failed to set signal handler.n");
+09.
+exit(1);
+10.
+}
+11.
+ 
+12.
+while (1) {
+13.
+sleep(1);
+14.
+}
+15.
+ 
+16.
+return 0;
+17.
+}
+18.
+ 
+19.
+void sigcatch(int sig) {
+20.
+printf("catch signal %dn", sig);
+21.
+exit(1);
+22.
+}

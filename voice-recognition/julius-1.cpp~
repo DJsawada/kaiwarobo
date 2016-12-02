@@ -1,0 +1,11 @@
+#include"stdio.h"
+#include"stdlib.h"
+main(){
+	system("julius -C ~/work/sawada/voice-recognition/dictation-kit-v4.3.1-linux/tabaco.jconf \
+		-charconv EUC-JP UTF-8 -quiet -input mic > \
+		~/work/sawada/voice-recognitionsatukitei.txt");
+	system("echo ~/work/sawada/voice-recognitionsatukitei.txt | open_jtalk -x \
+		/var/lib/mecab/dic/open-jtalk/naist-jdic \
+		-m /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice \
+		-ow ~/ira.wav");
+}

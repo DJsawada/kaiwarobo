@@ -1,0 +1,1 @@
+julius -plugindir . -C tabaco.jconf -charconv EUC-JP UTF-8

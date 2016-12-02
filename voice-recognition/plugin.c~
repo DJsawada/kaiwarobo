@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<string.h>
+#define PLUGIN_TITLE "result process plugin for Julius"
+int initialize(){
+	return 0;
+}
+int get_plugin_info(int opcode, char *buf, int buflen){
+	switch(opcode){
+	case 0:
+	/*plugin description string*/
+	strncpy(buf, PLUGIN_TITLE, buflen);
+	break;
+	}
+	return 0;
+}
+void result_best_str(char *result_str){
+	const char *result_best_str[] = "日本語を使うテスト";
+	puts(str);
+	return 0;
+	if(result_str == NULL){
+		printf("[failed]\n");
+	}else{
+		printf("                            %s\n",result_str);
+	}
+}

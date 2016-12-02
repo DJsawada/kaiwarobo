@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+extern  int echo_client( char *server, int portno, int nstr, char *strv[] );
+extern  ssize_t writen(int fd, const void *vptr, size_t n);
+extern  ssize_t readline(int fd, void *vptr, size_t maxlen);
+main( int argc, char *argv[] ){
+	char *server ;
+	int portno ;
+        if( argc < 3 ){
+		fprintf( stdout,"Usage: %s host port str1 ...\n",argv[0] );
+		exit( -1 );
+	}
+	server = argv[1] ;
+	portno = atoi( argv[2] );
+	echo_client( server, portno, argc-3, &argv[3] );
+}
+#define BUFFERSIZE      1024
+int echo_client( char *server, int portno, int nstr, char *strv[] ){
+	int sock ;
+	int rcount ;
+	int slen ;
+	char sbuf[BUFFERSIZE];
+	char rbuf[BUFFERSIZE];
+	int i ;
+	sock = tcp_connect( server, portno );
+	if( sock<0 )
+		exit( -1 );
+	for( i=0 ; i<nstr ; i++ ){
+		snprintf( sbuf,BUFFERSIZE,"%s\n",strv[i] );/* '\n' is important */
+		slen = strlen( sbuf );
+		printf("sending: %d bytes [%s]...\n",slen,sbuf );
+		if( writen( sock, sbuf, slen ) != slen ){
+			perror("write");
+			exit( 1 );
+		}
+		printf("waiting for reply: ...\n" );
+		if( (rcount = readline( sock, rbuf, BUFFERSIZE ))<0 ){
+			perror("read");
+			exit( 1 );
+		}
+  63:	            printf("received: %d bytes [%s]\n",rcount,rbuf );
+  64:	        }
+  65:	
+  66:	        close( sock );
+  67:	}

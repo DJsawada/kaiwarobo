@@ -1,0 +1,3 @@
+-gram SampleGrammars/memtaba/memtaba
+-C hmm_ptm.jconf
+-input rawfile
